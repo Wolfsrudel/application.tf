@@ -1,6 +1,6 @@
 # Terraform Local Document Decryptor
 
-This repository contains a single Terraform configuration that decrypts a base64 payload into a local text file and exposes the decrypted text as a Terraform output.
+This repository contains a Terraform configuration (split by concern across multiple `.tf` files) that decrypts a base64 payload into a local text file and exposes the decrypted text as a Terraform output.
 
 It is designed for local/offline-style workflows where you already have:
 - an AES-GCM ciphertext (base64, without `b64:` prefix),
@@ -9,7 +9,7 @@ It is designed for local/offline-style workflows where you already have:
 
 ## What This Configuration Does
 
-`application.tf` performs these steps:
+The configuration (mainly in `main.tf`) performs these steps:
 1. Creates `decrypt.py` (AES-GCM decryption script).
 2. Creates `requirements.txt` with `cryptography==46.0.7`.
 3. Runs a pinned `python:3.12-slim` Docker image via `local-exec`.
@@ -23,6 +23,15 @@ Terraform re-runs decryption when relevant inputs change:
 - ciphertext hash,
 - key hash,
 - existing target file content hash (or missing-file marker).
+
+## File Layout
+
+- Previous monolithic file `application.tf` has been replaced by `main.tf` and supporting files.
+- `terraform.tf`: Terraform version and provider requirements
+- `backend.tf`: Backend configuration
+- `variables.tf`: Input variable declarations and validation rules
+- `main.tf`: Resources, local execution, and data source
+- `outputs.tf`: Output declarations
 
 ## Requirements
 
