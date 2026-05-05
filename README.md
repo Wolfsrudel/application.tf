@@ -47,9 +47,9 @@ Terraform re-runs decryption when relevant inputs change:
 
 | Name | Type | Default | Sensitive | Description |
 |---|---|---|---|---|
-| `ciphertext_b64_no_prefix` | `string` | `""` | `true` | Base64 ciphertext without `b64:` prefix. Must be valid base64. |
-| `document_type` | `string` | `"resume"` | `false` | Output filename stem (allowed: letters, numbers, `_`, `-`). |
-| `key_b64` | `string` | `""` | `true` | Base64-encoded 32-byte key (44 chars, including padding). |
+| `ciphertext_b64_no_prefix` | `string` | `"fYmUKW4pp3m/p5BYiYUixCcxQDkrukmXQVSwRB/30jR5B29H1JL+IA=="` | `true` | Base64 ciphertext without `b64:` prefix. Must be valid base64. |
+| `document_type` | `string` | `"dummy"` | `false` | Output filename stem (allowed: letters, numbers, `_`, `-`). |
+| `key_b64` | `string` | `"2iRcJFDEeiSNTafNHRshdqBITk8VOZxjqwCvdzh51Dg="` | `true` | Base64-encoded 32-byte key (44 chars, including padding). |
 
 ### Ciphertext format expectation
 
