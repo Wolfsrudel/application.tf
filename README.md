@@ -1,15 +1,18 @@
 # Terraform Local Document Decryptor
 
-This repository contains a Terraform configuration (split by concern across multiple `.tf` files) that decrypts a base64 payload into a local text file and exposes the decrypted text as a Terraform output.
+This repository contains a Terraform configuration that decrypts a base64 payload
+into a local text file and exposes the decrypted text as a Terraform output.
 
 It is designed for local/offline-style workflows where you already have:
+
 - an AES-GCM ciphertext (base64, without `b64:` prefix),
 - a 32-byte AES key (base64),
 - a target document name (for example `resume`).
 
 ## What This Configuration Does
 
-The configuration (mainly in `main.tf`) performs these steps:
+The configuration performs these steps:
+
 1. Creates `decrypt.py` (AES-GCM decryption script).
 2. Creates `requirements.txt` with `cryptography==46.0.7`.
 3. Runs a pinned `python:3.12-slim` Docker image via `local-exec`.
@@ -18,6 +21,7 @@ The configuration (mainly in `main.tf`) performs these steps:
 6. Exposes plaintext through output `document`.
 
 Terraform re-runs decryption when relevant inputs change:
+
 - decryption script content,
 - requirements content,
 - ciphertext hash,
@@ -26,7 +30,6 @@ Terraform re-runs decryption when relevant inputs change:
 
 ## File Layout
 
-- Previous monolithic file `application.tf` has been replaced by `main.tf` and supporting files.
 - `terraform.tf`: Terraform version and provider requirements
 - `backend.tf`: Backend configuration
 - `variables.tf`: Input variable declarations and validation rules
@@ -51,6 +54,7 @@ Terraform re-runs decryption when relevant inputs change:
 ### Ciphertext format expectation
 
 The decryption script expects decoded ciphertext bytes in this layout:
+
 - first 12 bytes: AES-GCM nonce (IV),
 - remaining bytes: encrypted payload + GCM tag.
 
@@ -93,6 +97,7 @@ terraform output -raw document
 ```
 
 The decrypted file is also written to:
+
 - `./resume.txt` (or `./${document_type}.txt`)
 
 ## Example `terraform.tfvars` (alternative input method)
@@ -107,13 +112,17 @@ document_type            = "resume"
 
 ## Security Notes
 
-- `sensitive = true` only masks values in CLI output. Sensitive values can still end up in Terraform state.
-- This config uses the `local` backend. State is stored locally unless you change backend configuration.
+- `sensitive = true` only masks values in CLI output. Sensitive values can still
+  end up in Terraform state.
+- This config uses the `local` backend. State is stored locally unless you change
+  backend configuration.
 - Plaintext is written to `${document_type}.txt` on disk.
-- Output `document` is not marked `sensitive` in current code, so plaintext may be shown in CLI output.
+- Output `document` is not marked `sensitive` in current code, so plaintext may
+  be shown in CLI output.
 - Docker image is pinned by digest for reproducibility.
 
 If this is used with real secrets, consider:
+
 - remote encrypted backend with access controls,
 - marking output as sensitive,
 - secure cleanup for plaintext files and state artifacts.
@@ -137,4 +146,5 @@ To remove created artifacts from state-managed resources:
 terraform destroy
 ```
 
-Additional local files may remain depending on execution context (for example generated text files). Remove them manually if needed.
+Additional local files may remain depending on execution context
+(for example generated text files). Remove them manually if needed.

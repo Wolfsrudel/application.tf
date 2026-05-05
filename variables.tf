@@ -1,8 +1,8 @@
 variable "ciphertext_b64_no_prefix" {
   description = "Base64-encoded ciphertext without the 'b64:' prefix."
   type        = string
-  default     = ""
   sensitive   = true
+  default     = "fYmUKW4pp3m/p5BYiYUixCcxQDkrukmXQVSwRB/30jR5B29H1JL+IA=="
 
   validation {
     condition     = can(regex("^[A-Za-z0-9+/]+={0,2}$", var.ciphertext_b64_no_prefix))
@@ -24,8 +24,8 @@ variable "document_type" {
 variable "key_b64" {
   description = "Base64-encoded key for decryption."
   type        = string
-  default     = ""
   sensitive   = true
+  default     = "2iRcJFDEeiSNTafNHRshdqBITk8VOZxjqwCvdzh51Dg="
 
   validation {
     condition     = can(regex("^[A-Za-z0-9+/]+={0,2}$", var.key_b64)) && length(var.key_b64) == 44
