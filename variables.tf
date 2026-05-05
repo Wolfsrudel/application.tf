@@ -13,7 +13,7 @@ variable "ciphertext_b64_no_prefix" {
 variable "document_type" {
   description = "Type of document to decrypt (e.g., 'resume')."
   type        = string
-  default     = "resume"
+  default     = "dummy"
 
   validation {
     condition     = can(regex("^[a-zA-Z0-9_-]+$", var.document_type))
